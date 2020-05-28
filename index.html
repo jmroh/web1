@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ryancraft</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="script.js"></script>
+    <script src="blockarcade_mod.js"></script>
+</head>
+<body class="body">
+    <h1><a href="#welcome" onclick="fetchText('welcome')">Ryancraft</a></h1>
+    <input style="margin:10px;" type="button" value="night" onclick="
+        nightDayHandler(this)
+    ">
+    <div id="grid">
+        <ol id="nav">
+            
+        </ol>
+        <article>
+
+        </article>
+    </div>
+    <script>
+        function fetchText(name) {
+            fetch(name).then(function(response){
+                response.text().then(function(text){
+                    document.querySelector('article').innerHTML = text;
+                 })
+            });
+        }
+        if(location.hash){
+            fetchText(location.hash.substr(2));
+        } else {
+            fetchText('welcome');
+        }
+        fetch('list').then(function(response){
+            response.text().then(function(text){
+                // <li><a href="#!minecraft" onclick="fetchText('minecraft')">Minecraft</a></li>
+                var items = text.split(',');
+                var tags = '';
+                for(var i=0; i<items.length; i++) {
+                    var item = items[i].trim();
+                    var tag = '<li><a href="#!' + item + '" onclick="fetchText(\'' + item + '\')">' + item + '</a></li>';
+                    tags += tag;
+                }
+                document.querySelector('#nav').innerHTML = tags;
+            })
+        });
+    </script>
+</body>
+</html>
